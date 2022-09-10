@@ -1,0 +1,15 @@
+{
+  "tabWidth": 2,
+  "singleQuote": true,
+  "extends": ["plugin:react/recommended", "airbnb", "prettier"],
+  "rules": {
+    "import/extensions": [".js", ".jsx", ".json", ".ts", ".tsx"]
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.config.js"
+      }
+    }
+  }
+}
