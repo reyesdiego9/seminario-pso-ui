@@ -1,9 +1,9 @@
-import Button from '@mui/material/Button';
+import TableInformation from './Components/Table/TableInformation';
 
 const App = () => {
   return (
     <div>
-      <Button variant="contained">Contained</Button>
+      <TableInformation />
     </div>
   );
 };
