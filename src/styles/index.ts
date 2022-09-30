@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, withStyles } from '@mui/material/styles';
 
 declare module '@mui/material/styles' {
   interface Palette {
