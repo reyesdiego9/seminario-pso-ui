@@ -1,14 +1,18 @@
 export interface Data {
-  id: number;
-  codigo: string;
-  categoria: string;
-  cantidad: number;
-  descripcion: string;
-  unitValue: number;
+  idSuministro: number;
+  catSuministro: {
+    descripcionCatSum: string;
+    idCatSum: number;
+  };
+  cantidadSuministro: string;
+  descripcionSuministro: string;
+  valorUnitarioSuminstro: string;
   total: number;
-  activo: string;
-  donacion: number;
-  ubicacion: string;
+  activo: {
+    descripcionEstado: string;
+    idEstado: number;
+  };
+  donacionSuministro: string;
 }
 
 interface HeadCell {
@@ -20,39 +24,32 @@ interface HeadCell {
 
 export const headCells: readonly HeadCell[] = [
   {
-    id: 'id',
+    id: 'idSuministro',
     numeric: true,
     disablePadding: true,
     label: 'Id',
   },
   {
-    id: 'codigo',
-    numeric: false,
-    disablePadding: false,
-    label: 'Codigo',
-  },
-
-  {
-    id: 'categoria',
+    id: 'catSuministro',
     numeric: false,
     disablePadding: false,
     label: 'Categoria',
   },
   {
-    id: 'cantidad',
-    numeric: true,
+    id: 'cantidadSuministro',
+    numeric: false,
     disablePadding: false,
     label: 'Cantidad',
   },
   {
-    id: 'descripcion',
+    id: 'descripcionSuministro',
     numeric: false,
     disablePadding: false,
     label: 'Descripción',
   },
   {
-    id: 'unitValue',
-    numeric: true,
+    id: 'valorUnitarioSuminstro',
+    numeric: false,
     disablePadding: false,
     label: 'Valor Unitario',
   },
@@ -69,16 +66,10 @@ export const headCells: readonly HeadCell[] = [
     label: 'Activo/Baja',
   },
   {
-    id: 'donacion',
-    numeric: true,
-    disablePadding: false,
-    label: 'Donacion',
-  },
-  {
-    id: 'ubicacion',
+    id: 'donacionSuministro',
     numeric: false,
     disablePadding: false,
-    label: 'Ubicación',
+    label: 'Donacion',
   },
 ];
 
@@ -104,21 +95,4 @@ export function getComparator<Key extends keyof any>(
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
-function stableSort<T>(
-  array: readonly T[],
-  comparator: (a: T, b: T) => number
-) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
 }

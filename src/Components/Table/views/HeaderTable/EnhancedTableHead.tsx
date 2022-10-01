@@ -33,6 +33,7 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
   const createSortHandler =
     (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
+      console.log('property', property);
     };
 
   return (

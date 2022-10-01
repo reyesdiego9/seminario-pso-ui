@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Chip,
   Divider,
   Paper,
@@ -8,7 +7,6 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TablePagination,
   TableRow,
   Tooltip,
@@ -21,309 +19,31 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import HeaderTable from './views/HeaderTable/HeaderTable';
 import ButtonAction from './views/ButtonAction/ButtonAction';
 import { EnhancedTableHead } from './views/HeaderTable/EnhancedTableHead';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Data, getComparator, Order } from './utils/sortData';
-
-function createDataInventory(
-  id: number,
-  codigo: string,
-  categoria: string,
-  cantidad: number,
-  descripcion: string,
-  unitValue: number,
-  total: number,
-  activo: string,
-  donacion: number,
-  ubicacion: string
-) {
-  return {
-    id,
-    codigo,
-    categoria,
-    cantidad,
-    descripcion,
-    unitValue,
-    total,
-    activo,
-    donacion,
-    ubicacion,
-  };
-}
-
-const rows = [
-  createDataInventory(
-    1,
-    'a',
-    'test',
-    4,
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis, metus quis pretium posuere, quam risus elementum nisi, sit amet mattis ipsum tellus tristique nisi.',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'b',
-    'test',
-    4,
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis, metus quis pretium posuere, quam risus elementum nisi, sit amet mattis ipsum tellus tristique nisi.',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'c',
-    'test',
-    4,
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis, metus quis pretium posuere, quam risus elementum nisi, sit amet mattis ipsum tellus tristique nisi.',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'd',
-    'test',
-    4,
-    'Lorem ipsum dolor sit amet, consectetur sit amet, consectetur adipiscing elit. Duis sagittis, metus quissit amet, consectetur adipiscing elit. Duis sagittis, metus quissit amet, consectetur adipiscing elit. Duis sagittis, metus quissit amet, consectetur adipiscing elit. Duis sagittis, metus quissit amet, consectetur adipiscing elit. Duis sagittis, metus quissit amet, consectetur adipiscing elit. Duis sagittis, metus quissit amet, consectetur adipiscing elit. Duis sagittis, metus quisadipiscing elit. Duis sagittis, metus quis pretium posuere, quam risus elementum nisi, sit amet mattis ipsum tellus tristique nisi.',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'e',
-    'test',
-    4,
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sagittis, metus quis pretium posuere, quam risus elementum nisi, sit amet mattis ipsum tellus tristique nisi.',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-  createDataInventory(
-    1,
-    'f',
-    'test',
-    4,
-    'testtsetststestestes',
-    5,
-    5,
-    'activo',
-    5,
-    'prueba'
-  ),
-];
+import { useAppDispatch, useAppSelector } from '../../Redux/index';
+import { getAllSupplies } from '../../Redux/TableSupplies/TableSupplies';
 
 const TableInformation = () => {
+  const dispatch = useAppDispatch();
+  const {
+    data: supplies,
+    loading,
+    error,
+  } = useAppSelector((state) => state.dataSupplies);
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof Data>('codigo');
+  const [orderBy, setOrderBy] = useState<keyof Data>('idSuministro');
   const [selected, setSelected] = useState<readonly string[]>([]);
   const [page, setPage] = useState(0);
-  const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const initSupplies = useCallback(async () => {
+    await dispatch(getAllSupplies());
+  }, [dispatch]);
+
+  useEffect(() => {
+    initSupplies();
+  }, []);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -336,7 +56,7 @@ const TableInformation = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.codigo);
+      const newSelected = supplies.map((supplie) => supplie.idSuministro);
       setSelected(newSelected);
       return;
     }
@@ -396,18 +116,20 @@ const TableInformation = () => {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={supplies.length}
             />
             <Divider variant="middle" />
             <TableBody>
-              {rows
+              {supplies
                 .slice()
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.categoria);
+                .map((supplie, index) => {
+                  const isItemSelected = isSelected(supplie.idSuministro);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
+                  let total =
+                    parseFloat(supplie.valorUnitarioSuminstro) *
+                    parseFloat(supplie.cantidadSuministro);
                   return (
                     <TableRow
                       sx={{
@@ -416,11 +138,13 @@ const TableInformation = () => {
                         overflow: 'hidden',
                       }}
                       hover
-                      onClick={(event) => handleClick(event, row.categoria)}
+                      onClick={(event) =>
+                        handleClick(event, supplie.idSuministro)
+                      }
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.categoria}
+                      key={supplie.idSuministro}
                       selected={isItemSelected}
                     >
                       <TableCell
@@ -429,17 +153,18 @@ const TableInformation = () => {
                         scope="row"
                         align="center"
                       >
-                        {row.id}
+                        {supplie.idSuministro}
                       </TableCell>
-                      <TableCell align="center">{row.codigo}</TableCell>
                       <TableCell align="center">
                         <Chip
-                          label={row.categoria}
+                          label={supplie.catSuministro.descripcionCatSum}
                           color="primary"
                           size="medium"
                         />
                       </TableCell>
-                      <TableCell align="center">{row.cantidad}</TableCell>
+                      <TableCell align="center">
+                        {supplie.cantidadSuministro}
+                      </TableCell>
                       <TableCell
                         align="center"
                         style={{
@@ -447,13 +172,18 @@ const TableInformation = () => {
                           wordWrap: 'break-word',
                         }}
                       >
-                        {row.descripcion}
+                        {supplie.descripcionSuministro}
                       </TableCell>
-                      <TableCell align="center">{row.unitValue}</TableCell>
-                      <TableCell align="center">{row.total}</TableCell>
-                      <TableCell align="center">{row.activo}</TableCell>
-                      <TableCell align="center">{row.donacion}</TableCell>
-                      <TableCell align="center">{row.ubicacion}</TableCell>
+                      <TableCell align="center">
+                        {supplie.valorUnitarioSuminstro}
+                      </TableCell>
+                      <TableCell align="center">{total}</TableCell>
+                      <TableCell align="center">
+                        {supplie.estado.descripcionEstado}
+                      </TableCell>
+                      <TableCell align="center">
+                        {supplie.donacionSuministro}
+                      </TableCell>
                       <TableCell align="center">
                         <Stack
                           justifyContent="center"
@@ -495,7 +225,7 @@ const TableInformation = () => {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={supplies.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
