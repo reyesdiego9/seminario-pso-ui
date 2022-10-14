@@ -4,12 +4,14 @@ import { urlApi } from '../../Helpers/urlApi';
 
 interface suppliesInterface {
   data: Array<any>;
+  dataSelected: Array<any>;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: suppliesInterface = {
   data: [],
+  dataSelected: [],
   loading: false,
   error: '',
 };
@@ -22,8 +24,6 @@ export const getAllSupplies = createAsyncThunk(
       .get(`${url}/all`)
       .then((response) => response.data)
       .catch(console.error);
-    console.log('test1');
-    console.log(response.body);
     return response?.body;
   }
 );
@@ -31,17 +31,21 @@ export const getAllSupplies = createAsyncThunk(
 export const suppliesSlice = createSlice({
   name: 'supplies',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    getDataById: (state, payload) => {
+      state.dataSelected = state.data.find(
+        (d) => d.idSuministro === payload.payload
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getAllSupplies.pending, (state, action) => {
       state.loading = true;
       state.data = [];
-      console.log('pending', state.data);
     });
     builder.addCase(getAllSupplies.fulfilled, (state, action) => {
       state.data = action.payload;
       state.loading = false;
-      console.log('fulfilled', state.data);
     });
     builder.addCase(getAllSupplies.rejected, (state, action) => {
       state.loading = false;
@@ -50,4 +54,5 @@ export const suppliesSlice = createSlice({
   },
 });
 
+export const { getDataById } = suppliesSlice.actions;
 export default suppliesSlice.reducer;

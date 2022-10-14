@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 interface ButtonActionProps {
+  onClick?: any;
   title: string;
   variant: 'contained' | 'outlined' | 'text';
   color: 'primary' | 'secondary' | 'warning';
@@ -13,11 +14,11 @@ interface ButtonActionProps {
 }
 
 const ButtonAction = (props: ButtonActionProps) => {
-  const { title, variant, color, size, IconButton } = props;
+  const { onClick, title, variant, color, size, IconButton } = props;
   return (
     <>
       <Tooltip title={title}>
-        <Button variant={variant} color={color} size={size}>
+        <Button onClick={onClick} variant={variant} color={color} size={size}>
           {IconButton}
         </Button>
       </Tooltip>
