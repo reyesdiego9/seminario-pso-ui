@@ -35,8 +35,8 @@ const theme = createTheme({
       main: '#FFFD87',
     },
     neutral: {
-      main: '#BF101F',
-      contrastText: '#ffff',
+      main: '#FFFF',
+      contrastText: 'black',
     },
     neutral2: {
       main: '#fff',
