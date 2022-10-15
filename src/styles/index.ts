@@ -3,11 +3,13 @@ import { createTheme, withStyles } from '@mui/material/styles';
 declare module '@mui/material/styles' {
   interface Palette {
     neutral: Palette['primary'];
+    neutral2: Palette['primary'];
   }
 
   // allow configuration using `createTheme`
   interface PaletteOptions {
     neutral?: PaletteOptions['primary'];
+    neutral2?: PaletteOptions['primary'];
   }
 }
 
@@ -15,6 +17,7 @@ declare module '@mui/material/styles' {
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
     neutral: true;
+    neutral2: true;
   }
 }
 
@@ -34,6 +37,10 @@ const theme = createTheme({
     neutral: {
       main: '#BF101F',
       contrastText: '#ffff',
+    },
+    neutral2: {
+      main: '#fff',
+      contrastText: '#000',
     },
   },
 });
