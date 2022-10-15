@@ -5,9 +5,7 @@ import InputInventory from '../../Input/InputInventory';
 const FactoryModal = (props: any) => {
   const { data, dataInfo } = props;
   const { dataSelected } = useAppSelector((state) => state.dataSupplies);
-  useEffect(() => {
-    console.log('test', dataSelected);
-  }, []);
+
   switch (data.type) {
     case 'text':
       return (

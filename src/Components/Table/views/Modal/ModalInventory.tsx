@@ -29,8 +29,8 @@ const ModalInventory = (props: any) => {
     >
       <Box sx={style}>
         {configModal?.fields &&
-          configModal?.fields.map((field: any) => (
-            <FactoryModal key={field.order} data={field} />
+          configModal?.fields.map((field: any, index: number) => (
+            <FactoryModal key={`${field.name}-${index}`} data={field} />
           ))}
       </Box>
     </Modal>

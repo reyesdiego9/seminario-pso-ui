@@ -28,6 +28,7 @@ import {
 } from '../../Redux/TableSupplies/TableSupplies';
 import ModalInventory from './views/Modal/ModalInventory';
 import addInventoy from '../../config/informationType/addInventory.json';
+import InformationBox from './views/InformationBox/InformationBox';
 
 interface HandelOpenInterface {
   config: any;
@@ -114,148 +115,167 @@ const TableInformation = () => {
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
   return (
     <>
-      <Box sx={{ width: '85%' }}>
-        <Paper sx={{ width: '85%', mb: 2 }}>
-          <HeaderTable title="Inventario" />
-          <Divider variant="middle" />
-          <TableContainer component={Paper}>
-            <Table
-              sx={{
-                minWidth: 750,
-                maxWidth: 2000,
-                minHeight: 550,
-                maxHeight: 550,
-              }}
-              aria-label="tableTitle"
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={supplies.length}
-              />
-              <Divider variant="middle" />
-              <TableBody>
-                {supplies
-                  .slice()
-                  .sort(getComparator(order, orderBy))
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((supplie, index) => {
-                    const isItemSelected = isSelected(supplie.idSuministro);
-                    const labelId = `enhanced-table-checkbox-${index}`;
-                    let total =
-                      parseFloat(supplie.valorUnitarioSuminstro) *
-                      parseFloat(supplie.cantidadSuministro);
-                    return (
-                      <TableRow
-                        sx={{
-                          minHeight: 50,
-                          maxHeight: 50,
-                          overflow: 'hidden',
-                        }}
-                        hover
-                        onClick={(event) =>
-                          handleClick(event, supplie.idSuministro)
-                        }
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={supplie.idSuministro}
-                        selected={isItemSelected}
-                      >
-                        <TableCell
-                          component="th"
-                          id={labelId}
-                          scope="row"
-                          align="center"
-                        >
-                          {supplie.idSuministro}
-                        </TableCell>
-                        <TableCell align="center">
-                          <Chip
-                            label={supplie.catSuministro.descripcionCatSum}
-                            color="primary"
-                            size="medium"
-                          />
-                        </TableCell>
-                        <TableCell align="center">
-                          {supplie.cantidadSuministro}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          style={{
-                            whiteSpace: 'normal',
-                            wordWrap: 'break-word',
+      <Box
+        sx={{
+          width: 80,
+          height: 80,
+        }}
+      />
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Box sx={{ width: '90%' }}>
+          <InformationBox />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          width: 10,
+          height: 10,
+        }}
+      />
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Box sx={{ width: '90%' }}>
+          <Paper sx={{ width: '100%', mb: 2 }}>
+            <HeaderTable title="Inventario" />
+            <Divider variant="middle" />
+            <TableContainer component={Paper}>
+              <Table
+                sx={{
+                  minWidth: 750,
+                  maxWidth: 2000,
+                  minHeight: 550,
+                  maxHeight: 550,
+                }}
+                aria-label="tableTitle"
+              >
+                <EnhancedTableHead
+                  numSelected={selected.length}
+                  order={order}
+                  orderBy={orderBy}
+                  onSelectAllClick={handleSelectAllClick}
+                  onRequestSort={handleRequestSort}
+                  rowCount={supplies.length}
+                />
+                <Divider variant="middle" />
+                <TableBody>
+                  {supplies
+                    .slice()
+                    .sort(getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((supplie, index) => {
+                      const isItemSelected = isSelected(supplie.idSuministro);
+                      const labelId = `enhanced-table-checkbox-${index}`;
+                      let total =
+                        parseFloat(supplie.valorUnitarioSuminstro) *
+                        parseFloat(supplie.cantidadSuministro);
+                      return (
+                        <TableRow
+                          sx={{
+                            minHeight: 50,
+                            maxHeight: 50,
+                            overflow: 'hidden',
                           }}
+                          hover
+                          onClick={(event) =>
+                            handleClick(event, supplie.idSuministro)
+                          }
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={supplie.idSuministro}
+                          selected={isItemSelected}
                         >
-                          {supplie.descripcionSuministro}
-                        </TableCell>
-                        <TableCell align="center">
-                          {supplie.valorUnitarioSuminstro}
-                        </TableCell>
-                        <TableCell align="center">{total}</TableCell>
-                        <TableCell align="center">
-                          {supplie.estado.descripcionEstado}
-                        </TableCell>
-                        <TableCell align="center">
-                          {supplie.donacionSuministro}
-                        </TableCell>
-                        <TableCell align="center">
-                          <Stack
-                            justifyContent="center"
-                            alignItems="center"
-                            spacing={1}
-                            direction="row"
+                          <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                            align="center"
                           >
-                            <ButtonAction
-                              onClick={() =>
-                                handleOpen({
-                                  config: addInventoy,
-                                  idModalData: supplie.idSuministro,
-                                })
-                              }
-                              title="Reabastecimiento"
-                              variant="contained"
-                              color="secondary"
-                              size="large"
-                              IconButton={<AddIcon />}
-                            />
-                            <ButtonAction
-                              title="Mantenimiento"
-                              variant="contained"
-                              color="warning"
-                              size="large"
-                              IconButton={<WarningAmberIcon />}
-                            />
-                            <ButtonAction
-                              title="Pedir Equipo"
-                              variant="outlined"
+                            {supplie.idSuministro}
+                          </TableCell>
+                          <TableCell align="center">
+                            <Chip
+                              label={supplie.catSuministro.descripcionCatSum}
                               color="primary"
-                              size="large"
-                              IconButton={
-                                <KeyboardDoubleArrowRightIcon color="action" />
-                              }
+                              size="medium"
                             />
-                          </Stack>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={supplies.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
+                          </TableCell>
+                          <TableCell align="center">
+                            {supplie.cantidadSuministro}
+                          </TableCell>
+                          <TableCell
+                            align="center"
+                            style={{
+                              whiteSpace: 'normal',
+                              wordWrap: 'break-word',
+                            }}
+                          >
+                            {supplie.descripcionSuministro}
+                          </TableCell>
+                          <TableCell align="center">
+                            {supplie.valorUnitarioSuminstro}
+                          </TableCell>
+                          <TableCell align="center">{total}</TableCell>
+                          <TableCell align="center">
+                            {supplie.estado.descripcionEstado}
+                          </TableCell>
+                          <TableCell align="center">
+                            {supplie.donacionSuministro}
+                          </TableCell>
+                          <TableCell align="center">
+                            <Stack
+                              justifyContent="center"
+                              alignItems="center"
+                              spacing={1}
+                              direction="row"
+                            >
+                              <ButtonAction
+                                onClick={() =>
+                                  handleOpen({
+                                    config: addInventoy,
+                                    idModalData: supplie.idSuministro,
+                                  })
+                                }
+                                title="Reabastecimiento"
+                                variant="contained"
+                                color="secondary"
+                                size="large"
+                                IconButton={<AddIcon />}
+                              />
+                              <ButtonAction
+                                title="Mantenimiento"
+                                variant="contained"
+                                color="warning"
+                                size="large"
+                                IconButton={<WarningAmberIcon />}
+                              />
+                              <ButtonAction
+                                title="Pedir Equipo"
+                                variant="outlined"
+                                color="primary"
+                                size="large"
+                                IconButton={
+                                  <KeyboardDoubleArrowRightIcon color="action" />
+                                }
+                              />
+                            </Stack>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={supplies.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        </Box>
       </Box>
       {idModal !== 0 && (
         <ModalInventory

@@ -5,25 +5,25 @@
   "subtitle": "Información del producto",
   "fields": [
     {
-      "name": "descriptionProduct",
-      "description": "Descripcion del producto",
+      "name": "name",
+      "description": "Nombre",
       "type": "text",
-      "order": 1,
-      "value": "descripcionSuministro"
+      "value": "nombreSuministro",
+      "readonly": "true"
+    },
+    {
+      "name": "Categoria",
+      "description": "Categoria",
+      "type": "number",
+      "value": "catSuministro.descripcionTipoSum",
+      "readonly": "true"
     },
     {
       "name": "amount",
       "description": "Cantidad",
       "type": "number",
-      "order": 3,
-      "value": "cantidadSuministro"
-    },
-    {
-      "name": "donation",
-      "description": "Donacion",
-      "type": "text",
-      "order": 2,
-      "value": "donacionSuministro"
+      "value": "cantidadSuministro",
+      "readonly": "false"
     }
   ]
 }
