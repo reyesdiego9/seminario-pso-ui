@@ -1,13 +1,14 @@
+import { useState, useEffect, useCallback } from 'react';
 import {
   Box,
-  Button,
+  Chip,
   Divider,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
+  TablePagination,
   TableRow,
   Tooltip,
 } from '@mui/material';
@@ -17,100 +18,273 @@ import AddIcon from '@mui/icons-material/Add';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 import HeaderTable from './views/HeaderTable/HeaderTable';
+import ButtonAction from './views/ButtonAction/ButtonAction';
+import { EnhancedTableHead } from './views/HeaderTable/EnhancedTableHead';
+import { Data, getComparator, Order } from './utils/sortData';
+import { useAppDispatch, useAppSelector } from '../../Redux/index';
+import {
+  getAllSupplies,
+  getDataById,
+} from '../../Redux/TableSupplies/TableSupplies';
+import ModalInventory from './views/Modal/ModalInventory';
+import addInventoy from '../../config/informationType/addInventory.json';
+import InformationBox from './views/InformationBox/InformationBox';
 
-function createData(
-  name: string,
-  category: string,
-  amount: number,
-  inUse: number,
-  available: number,
-  maintenance: number
-) {
-  return { name, category, amount, inUse, available, maintenance };
+interface HandelOpenInterface {
+  config: any;
+  idModalData: any;
 }
 
-const rows = [
-  createData('Frozen yoghurt', 'Frozen yoghurt', 1, 1, 1, 1),
-  createData('Frozen yoghurt', 'Frozen yoghurt', 1, 1, 1, 1),
-  createData('Frozen yoghurt', 'Frozen yoghurt', 1, 1, 1, 1),
-  createData('Frozen yoghurt', 'Frozen yoghurt', 1, 1, 1, 1),
-  createData('Frozen yoghurt', 'Frozen yoghurt', 1, 1, 1, 1),
-  createData('Frozen yoghurt', 'Frozen yoghurt', 1, 1, 1, 1),
-  createData('Frozen yoghurt', 'Frozen yoghurt', 1, 1, 1, 1),
-  createData('Frozen yoghurt', 'Frozen yoghurt', 1, 1, 1, 1),
-];
-
 const TableInformation = () => {
+  const dispatch = useAppDispatch();
+  const [open, setOpen] = useState(false);
+  const [idModal, setIdModal] = useState(0);
+  const handleOpen = (props: HandelOpenInterface) => {
+    const { config, idModalData } = props;
+    setOpen(true);
+    setConfig(config);
+    dispatch(getDataById(idModalData));
+    setIdModal(idModalData);
+  };
+  const [configModal, setConfig] = useState('');
+
+  const { data: supplies } = useAppSelector((state) => state.dataSupplies);
+  const [order, setOrder] = useState<Order>('asc');
+  const [orderBy, setOrderBy] = useState<keyof Data>('idSuministro');
+  const [selected, setSelected] = useState<readonly string[]>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const initSupplies = useCallback(async () => {
+    await dispatch(getAllSupplies());
+  }, [dispatch]);
+
+  useEffect(() => {
+    initSupplies();
+  }, []);
+
+  const handleRequestSort = (
+    event: React.MouseEvent<unknown>,
+    property: keyof Data
+  ) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      const newSelected = supplies.map((supplie) => supplie.idSuministro);
+      setSelected(newSelected);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected: readonly string[] = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+
+    setSelected(newSelected);
+  };
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const isSelected = (name: string) => selected.indexOf(name) !== -1;
   return (
-    <Box sx={{ width: '80%' }}>
-      <Paper sx={{ width: '80%', mb: 2 }}>
-        <HeaderTable title="Inventario" />
-        <Divider variant="middle" />
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="left">Nombre</TableCell>
-                <TableCell align="center">Categoria</TableCell>
-                <TableCell align="center">Cantidad</TableCell>
-                <TableCell align="center">Disponibles</TableCell>
-                <TableCell align="center">En uso</TableCell>
-                <TableCell align="center">Mantenimiento</TableCell>
-                <TableCell align="center">Acciones</TableCell>
-              </TableRow>
-            </TableHead>
+    <>
+      <Box
+        sx={{
+          width: 80,
+          height: 80,
+        }}
+      />
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Box sx={{ width: '90%' }}>
+          <InformationBox />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          width: 10,
+          height: 10,
+        }}
+      />
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Box sx={{ width: '90%' }}>
+          <Paper sx={{ width: '100%', mb: 2 }}>
+            <HeaderTable title="Inventario" />
             <Divider variant="middle" />
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell align="center">{row.category}</TableCell>
-                  <TableCell align="center">{row.amount}</TableCell>
-                  <TableCell align="center">{row.inUse}</TableCell>
-                  <TableCell align="center">{row.available}</TableCell>
-                  <TableCell align="center">{row.maintenance}</TableCell>
-                  <TableCell align="center">
-                    <Stack
-                      justifyContent="center"
-                      alignItems="center"
-                      spacing={1}
-                      direction="row"
-                    >
-                      <Tooltip title="Reabastecimiento">
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          size="large"
+            <TableContainer component={Paper}>
+              <Table
+                sx={{
+                  minWidth: 750,
+                  maxWidth: 2000,
+                  minHeight: 550,
+                  maxHeight: 550,
+                }}
+                aria-label="tableTitle"
+              >
+                <EnhancedTableHead
+                  numSelected={selected.length}
+                  order={order}
+                  orderBy={orderBy}
+                  onSelectAllClick={handleSelectAllClick}
+                  onRequestSort={handleRequestSort}
+                  rowCount={supplies.length}
+                />
+                <Divider variant="middle" />
+                <TableBody>
+                  {supplies
+                    .slice()
+                    .sort(getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((supplie, index) => {
+                      const isItemSelected = isSelected(supplie.idSuministro);
+                      const labelId = `enhanced-table-checkbox-${index}`;
+                      let total =
+                        parseFloat(supplie.valorUnitarioSuminstro) *
+                        parseFloat(supplie.cantidadSuministro);
+                      return (
+                        <TableRow
+                          sx={{
+                            minHeight: 50,
+                            maxHeight: 50,
+                            overflow: 'hidden',
+                          }}
+                          hover
+                          onClick={(event) =>
+                            handleClick(event, supplie.idSuministro)
+                          }
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={supplie.idSuministro}
+                          selected={isItemSelected}
                         >
-                          <AddIcon />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip title="Mantenimiento">
-                        <Button
-                          variant="contained"
-                          color="warning"
-                          size="large"
-                        >
-                          <WarningAmberIcon />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip title="Pedir Equipo">
-                        <Button variant="outlined" color="primary" size="large">
-                          <KeyboardDoubleArrowRightIcon color="action" />
-                        </Button>
-                      </Tooltip>
-                    </Stack>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    </Box>
+                          <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                            align="center"
+                          >
+                            {supplie.idSuministro}
+                          </TableCell>
+                          <TableCell align="center">
+                            <Chip
+                              label={supplie.catSuministro.descripcionCatSum}
+                              color="primary"
+                              size="medium"
+                            />
+                          </TableCell>
+                          <TableCell align="center">
+                            {supplie.cantidadSuministro}
+                          </TableCell>
+                          <TableCell
+                            align="center"
+                            style={{
+                              whiteSpace: 'normal',
+                              wordWrap: 'break-word',
+                            }}
+                          >
+                            {supplie.descripcionSuministro}
+                          </TableCell>
+                          <TableCell align="center">
+                            {supplie.valorUnitarioSuminstro}
+                          </TableCell>
+                          <TableCell align="center">{total}</TableCell>
+                          <TableCell align="center">
+                            {supplie.estado.descripcionEstado}
+                          </TableCell>
+                          <TableCell align="center">
+                            {supplie.donacionSuministro}
+                          </TableCell>
+                          <TableCell align="center">
+                            <Stack
+                              justifyContent="center"
+                              alignItems="center"
+                              spacing={1}
+                              direction="row"
+                            >
+                              <ButtonAction
+                                onClick={() =>
+                                  handleOpen({
+                                    config: addInventoy,
+                                    idModalData: supplie.idSuministro,
+                                  })
+                                }
+                                title="Reabastecimiento"
+                                variant="contained"
+                                color="secondary"
+                                size="large"
+                                IconButton={<AddIcon />}
+                              />
+                              <ButtonAction
+                                title="Mantenimiento"
+                                variant="contained"
+                                color="warning"
+                                size="large"
+                                IconButton={<WarningAmberIcon />}
+                              />
+                              <ButtonAction
+                                title="Pedir Equipo"
+                                variant="outlined"
+                                color="primary"
+                                size="large"
+                                IconButton={
+                                  <KeyboardDoubleArrowRightIcon color="action" />
+                                }
+                              />
+                            </Stack>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={supplies.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        </Box>
+      </Box>
+      {idModal !== 0 && (
+        <ModalInventory
+          toggle={open}
+          setOpen={setOpen}
+          configModal={configModal}
+        />
+      )}
+    </>
   );
 };
 

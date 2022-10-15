@@ -1,0 +1,29 @@
+{
+  "name": "ADD_INVENTORY_DATA",
+  "description": "Configuracion para poder agregar los inputs del Modal Agregar inventario",
+  "title": "Agregar Producto",
+  "subtitle": "Información del producto",
+  "fields": [
+    {
+      "name": "name",
+      "description": "Nombre",
+      "type": "text",
+      "value": "nombreSuministro",
+      "readonly": "true"
+    },
+    {
+      "name": "Categoria",
+      "description": "Categoria",
+      "type": "number",
+      "value": "catSuministro.descripcionTipoSum",
+      "readonly": "true"
+    },
+    {
+      "name": "amount",
+      "description": "Cantidad",
+      "type": "number",
+      "value": "cantidadSuministro",
+      "readonly": "false"
+    }
+  ]
+}
