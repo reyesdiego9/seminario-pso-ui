@@ -1,9 +1,10 @@
+import Login from './Components/Login/Login';
 import TableInformation from './Components/Table/TableInformation';
 
 const App = () => {
   return (
     <div>
-      <TableInformation />
+      <Login />
     </div>
   );
 };
