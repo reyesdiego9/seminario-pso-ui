@@ -1,0 +1,21 @@
+{
+  "name": "ADD_INVENTORY_SUPPLY",
+  "description": "Configuracion para poder reabastecer los productos",
+  "title": "Agregar a Inventario",
+  "subtitle": "Información del producto",
+  "fields": [
+    {
+      "name": "idCategorias",
+      "description": "Suministro",
+      "type": "select",
+      "api": "suministros/all",
+      "readonly": "false"
+    },
+    {
+      "name": "cantidad",
+      "description": "Cantidad",
+      "type": "number",
+      "readonly": false
+    }
+  ]
+}

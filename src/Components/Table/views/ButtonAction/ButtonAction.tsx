@@ -8,9 +8,9 @@ interface ButtonActionProps {
   onClick?: any;
   title: string;
   variant: 'contained' | 'outlined' | 'text';
-  color: 'primary' | 'secondary' | 'warning';
+  color: 'primary' | 'secondary' | 'warning' | 'neutral';
   size: 'large' | 'medium' | 'small';
-  IconButton: JSX.Element;
+  IconButton: JSX.Element | null;
 }
 
 const ButtonAction = (props: ButtonActionProps) => {
@@ -18,8 +18,14 @@ const ButtonAction = (props: ButtonActionProps) => {
   return (
     <>
       <Tooltip title={title}>
-        <Button onClick={onClick} variant={variant} color={color} size={size}>
-          {IconButton}
+        <Button
+          sx={{ marginRight: 2 }}
+          onClick={onClick}
+          variant={variant}
+          color={color}
+          size={size}
+        >
+          {IconButton ? IconButton : title}
         </Button>
       </Tooltip>
     </>

@@ -1,30 +1,46 @@
-import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
-import logo_bomberos from './assets/logo_bomberos.jpg';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [msg, setMsg] = useState('');
+  const history = useNavigate();
+
+  const Auth = async (e: any) => {
+    e.preventDefault();
+    try {
+      const resp = await axios.post('http://localhost:3001/login', {
+        email: email,
+        password: password,
+      });
+      console.log('resp', resp);
+      // history.push('/dashboard');
+    } catch (error: any) {
+      if (error.response) {
+        setMsg(error.response.data.msg);
+      }
+    }
+  };
+
   const style1 = {
     imagenlogo: {
       width: '85px',
     },
   };
 
-  const form = {
-    width: 100,
-    marginTop: 1,
-  };
-
   return (
     <>
-      <AppBar color="neutral" position="static">
+      <AppBar color="inherit" position="static">
         <Container maxWidth={false}>
           <Toolbar disableGutters>
             <img
@@ -80,6 +96,9 @@ const Login = () => {
                   variant="outlined"
                   label="Usuario"
                   name="Usuario"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 />
                 <TextField
                   fullWidth
@@ -89,10 +108,15 @@ const Login = () => {
                   variant="outlined"
                   label="Contraseña"
                   name="Password"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                 />
-                <Button fullWidth variant="contained" color="primary">
-                  Iniciar Sesion
-                </Button>
+                <Link to="/home">
+                  <Button fullWidth variant="contained" color="primary">
+                    Iniciar Sesion
+                  </Button>
+                </Link>
               </form>
             </Box>
           </Box>

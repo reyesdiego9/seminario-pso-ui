@@ -5,25 +5,49 @@
   "subtitle": "Información del producto",
   "fields": [
     {
-      "name": "name",
+      "name": "nombreSuministro",
       "description": "Nombre",
       "type": "text",
-      "value": "nombreSuministro",
-      "readonly": "true"
+      "readonly": false
     },
     {
-      "name": "Categoria",
+      "name": "descripcionSuministro",
+      "description": "descripcion",
+      "type": "text",
+      "readonly": false
+    },
+    {
+      "name": "valorUnitarioSuminstro",
+      "description": "Valor Unitario",
+      "type": "number",
+      "readonly": false
+    },
+    {
+      "name": "donacionSuministro",
+      "description": "Donacion",
+      "type": "text",
+      "readonly": false
+    },
+    {
+      "name": "idTipoSum",
+      "description": "Tipo de Suministros",
+      "type": "select",
+      "api": "tiposuministro/all",
+      "readonly": false
+    },
+    {
+      "name": "idCategorias",
       "description": "Categoria",
-      "type": "number",
-      "value": "catSuministro.descripcionTipoSum",
-      "readonly": "true"
+      "type": "select",
+      "api": "categoriasuministro/all",
+      "readonly": false
     },
     {
-      "name": "amount",
-      "description": "Cantidad",
-      "type": "number",
-      "value": "cantidadSuministro",
-      "readonly": "false"
+      "name": "idUbicaciones",
+      "description": "Ubicación",
+      "type": "select",
+      "api": "ubicacion/all",
+      "readonly": false
     }
   ]
 }

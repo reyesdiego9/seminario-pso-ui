@@ -8,7 +8,6 @@ import {
   Typography,
 } from '@mui/material';
 import { useAppSelector } from '../../../../Redux';
-import { useEffect } from 'react';
 
 const InformationBox = () => {
   const { data } = useAppSelector((state) => state.dataSupplies);
@@ -59,7 +58,7 @@ const InformationBox = () => {
               En uso
             </Typography>
             <Typography sx={{ fontSize: 18, fontWeight: 'bold' }} gutterBottom>
-              Word of the Day
+              0
             </Typography>
           </CardContent>
         </Grid>

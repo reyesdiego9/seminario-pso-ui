@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   Box,
+  Button,
   Chip,
   Divider,
   Paper,
@@ -28,7 +29,13 @@ import {
 } from '../../Redux/TableSupplies/TableSupplies';
 import ModalInventory from './views/Modal/ModalInventory';
 import addInventoy from '../../config/informationType/addInventory.json';
+import resupplyInventory from '../../config/informationType/resupplyInventory.json';
+import agregarDatoInventario from '../../config/informationType/agregarDatoInventario.json';
+import mantenimiento from '../../config/informationType/mantenimiento.json';
 import InformationBox from './views/InformationBox/InformationBox';
+import Navbar from './views/Navbar/Navbar';
+import axios from 'axios';
+import fileDownload from 'js-file-download';
 
 interface HandelOpenInterface {
   config: any;
@@ -41,16 +48,23 @@ const TableInformation = () => {
   const [idModal, setIdModal] = useState(0);
   const handleOpen = (props: HandelOpenInterface) => {
     const { config, idModalData } = props;
-    setOpen(true);
+
     setConfig(config);
-    dispatch(getDataById(idModalData));
-    setIdModal(idModalData);
+    setOpen(true);
+
+    console.log('open', open);
+    if (idModalData != 0) {
+      console.log('estoy dentro');
+      console.log('idModalData:', idModalData);
+      dispatch(getDataById(idModalData));
+      setIdModal(idModalData);
+    }
   };
   const [configModal, setConfig] = useState('');
 
   const { data: supplies } = useAppSelector((state) => state.dataSupplies);
   const [order, setOrder] = useState<Order>('asc');
-  const [orderBy, setOrderBy] = useState<keyof Data>('idSuministro');
+  const [orderBy, setOrderBy] = useState<keyof Data>('id_inventario');
   const [selected, setSelected] = useState<readonly string[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -74,11 +88,19 @@ const TableInformation = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = supplies.map((supplie) => supplie.idSuministro);
+      const newSelected = supplies.map((supplie) => supplie.id_inventario);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
+  };
+
+  const handelPdf = async () => {
+    return await axios
+      .get('http://localhost:8080/generate/pdf', {
+        responseType: 'blob',
+      })
+      .then((response) => fileDownload(response.data, 'filename.pdf'));
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
@@ -115,6 +137,7 @@ const TableInformation = () => {
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
   return (
     <>
+      <Navbar />
       <Box
         sx={{
           width: 80,
@@ -122,9 +145,47 @@ const TableInformation = () => {
         }}
       />
       <Box display="flex" justifyContent="center" alignItems="center">
-        <Box sx={{ width: '90%' }}>
-          <InformationBox />
-        </Box>
+        <Stack spacing={4} sx={{ width: '90%' }}>
+          <Box sx={{ width: '100%' }}>
+            <InformationBox />
+          </Box>
+          <Box>
+            <ButtonAction
+              title="Agregar Producto"
+              variant="contained"
+              color="secondary"
+              size="large"
+              IconButton={null}
+              onClick={() =>
+                handleOpen({
+                  config: addInventoy,
+                  idModalData: 0,
+                })
+              }
+            />
+            <ButtonAction
+              title="Agregar a Inventario"
+              variant="contained"
+              color="warning"
+              size="large"
+              IconButton={null}
+              onClick={() =>
+                handleOpen({
+                  config: agregarDatoInventario,
+                  idModalData: 0,
+                })
+              }
+            />
+            <ButtonAction
+              title="Importar en PDF"
+              variant="contained"
+              color="neutral"
+              size="large"
+              IconButton={null}
+              onClick={() => handelPdf()}
+            />
+          </Box>
+        </Stack>
       </Box>
       <Box
         sx={{
@@ -161,12 +222,9 @@ const TableInformation = () => {
                     .slice()
                     .sort(getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((supplie, index) => {
-                      const isItemSelected = isSelected(supplie.idSuministro);
+                    .map((supplie: any, index: any) => {
+                      const isItemSelected = isSelected(supplie.id_inventario);
                       const labelId = `enhanced-table-checkbox-${index}`;
-                      let total =
-                        parseFloat(supplie.valorUnitarioSuminstro) *
-                        parseFloat(supplie.cantidadSuministro);
                       return (
                         <TableRow
                           sx={{
@@ -176,12 +234,12 @@ const TableInformation = () => {
                           }}
                           hover
                           onClick={(event) =>
-                            handleClick(event, supplie.idSuministro)
+                            handleClick(event, supplie.id_inventario)
                           }
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
-                          key={supplie.idSuministro}
+                          key={supplie.id_inventario}
                           selected={isItemSelected}
                         >
                           <TableCell
@@ -190,17 +248,17 @@ const TableInformation = () => {
                             scope="row"
                             align="center"
                           >
-                            {supplie.idSuministro}
+                            {supplie.id_inventario}
                           </TableCell>
                           <TableCell align="center">
                             <Chip
-                              label={supplie.catSuministro.descripcionCatSum}
+                              label={supplie.categoria}
                               color="primary"
                               size="medium"
                             />
                           </TableCell>
                           <TableCell align="center">
-                            {supplie.cantidadSuministro}
+                            {supplie.cantidad}
                           </TableCell>
                           <TableCell
                             align="center"
@@ -209,17 +267,23 @@ const TableInformation = () => {
                               wordWrap: 'break-word',
                             }}
                           >
-                            {supplie.descripcionSuministro}
+                            {supplie.nombre_producto}
                           </TableCell>
                           <TableCell align="center">
-                            {supplie.valorUnitarioSuminstro}
-                          </TableCell>
-                          <TableCell align="center">{total}</TableCell>
-                          <TableCell align="center">
-                            {supplie.estado.descripcionEstado}
+                            {supplie.descripcion_producto}
                           </TableCell>
                           <TableCell align="center">
-                            {supplie.donacionSuministro}
+                            {supplie.valor_unitario}
+                          </TableCell>
+                          <TableCell align="center">{supplie.total}</TableCell>
+                          <TableCell align="center">
+                            {supplie.activo_baja}
+                          </TableCell>
+                          <TableCell align="center">
+                            {supplie.donacion}
+                          </TableCell>
+                          <TableCell align="center">
+                            {supplie.ubicacion}
                           </TableCell>
                           <TableCell align="center">
                             <Stack
@@ -229,17 +293,17 @@ const TableInformation = () => {
                               direction="row"
                             >
                               <ButtonAction
-                                onClick={() =>
-                                  handleOpen({
-                                    config: addInventoy,
-                                    idModalData: supplie.idSuministro,
-                                  })
-                                }
                                 title="Reabastecimiento"
                                 variant="contained"
                                 color="secondary"
                                 size="large"
                                 IconButton={<AddIcon />}
+                                onClick={() =>
+                                  handleOpen({
+                                    config: resupplyInventory,
+                                    idModalData: supplie.id_inventario,
+                                  })
+                                }
                               />
                               <ButtonAction
                                 title="Mantenimiento"
@@ -247,14 +311,11 @@ const TableInformation = () => {
                                 color="warning"
                                 size="large"
                                 IconButton={<WarningAmberIcon />}
-                              />
-                              <ButtonAction
-                                title="Pedir Equipo"
-                                variant="outlined"
-                                color="primary"
-                                size="large"
-                                IconButton={
-                                  <KeyboardDoubleArrowRightIcon color="action" />
+                                onClick={() =>
+                                  handleOpen({
+                                    config: mantenimiento,
+                                    idModalData: supplie.id_inventario,
+                                  })
                                 }
                               />
                             </Stack>
@@ -277,13 +338,12 @@ const TableInformation = () => {
           </Paper>
         </Box>
       </Box>
-      {idModal !== 0 && (
-        <ModalInventory
-          toggle={open}
-          setOpen={setOpen}
-          configModal={configModal}
-        />
-      )}
+
+      <ModalInventory
+        toggle={open}
+        setOpen={setOpen}
+        configModal={configModal}
+      />
     </>
   );
 };

@@ -1,0 +1,43 @@
+{
+  "name": "RESUPPLY_INVENTORY_DATA",
+  "description": "Configuracion para poder reabastecer los productos",
+  "title": "Reabastecer Producto",
+  "subtitle": "Información del producto",
+  "fields": [
+    {
+      "name": "id_inventario",
+      "description": "Id",
+      "type": "number",
+      "value": "id_inventario",
+      "readonly": true
+    },
+    {
+      "name": "nombre",
+      "description": "Nombre",
+      "type": "text",
+      "value": "nombre_producto",
+      "readonly": true
+    },
+    {
+      "name": "categoria",
+      "description": "Categoria",
+      "type": "text",
+      "value": "categoria",
+      "readonly": true
+    },
+    {
+      "name": "idsuministro",
+      "description": "idsuministro",
+      "type": "hidden",
+      "value": "idsuministro",
+      "hidden": true,
+      "readonly": true
+    },
+    {
+      "name": "cantidad",
+      "description": "Cantidad",
+      "type": "number",
+      "readonly": false
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "MANTENIMIENTO",
+  "description": "Configuracion para el mantenimiento",
+  "title": "Mantenimiento",
+  "subtitle": "Información del producto",
+  "fields": [
+    {
+      "name": "id_inventario",
+      "description": "Id",
+      "type": "hidden",
+      "value": "id_inventario",
+      "readonly": true
+    },
+    {
+      "name": "idCategorias",
+      "description": "Estado",
+      "type": "select",
+      "api": "estado/all",
+      "readonly": "false"
+    },
+    {
+      "name": "cantidad",
+      "description": "Cantidad",
+      "type": "number",
+      "readonly": false
+    }
+  ]
+}

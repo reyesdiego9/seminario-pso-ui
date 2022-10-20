@@ -1,16 +1,15 @@
-import Login from './Components/Login/Login';
 import TableInformation from './Components/Table/TableInformation';
-import Navbar from './Components/Table/views/Navbar/Navbar';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import LoginPage from './Pages/LoginPage';
 
 const App = () => {
   return (
     <>
       <BrowserRouter>
-        <Navbar />
         <Routes>
           <Route path="/">
-            <Route path="/" element={<TableInformation />} />
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/home" element={<TableInformation />} />
           </Route>
         </Routes>
       </BrowserRouter>

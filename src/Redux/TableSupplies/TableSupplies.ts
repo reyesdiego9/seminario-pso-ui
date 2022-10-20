@@ -21,7 +21,7 @@ export const getAllSupplies = createAsyncThunk(
   async (_, thunkApi) => {
     const url = urlApi.supplies;
     const response = await axios
-      .get(`${url}/all`)
+      .get(`${url}/get`)
       .then((response) => response.data)
       .catch(console.error);
     return response?.body;
@@ -34,7 +34,7 @@ export const suppliesSlice = createSlice({
   reducers: {
     getDataById: (state, payload) => {
       state.dataSelected = state.data.find(
-        (d) => d.idSuministro === payload.payload
+        (d) => d.id_inventario === payload.payload
       );
     },
   },
