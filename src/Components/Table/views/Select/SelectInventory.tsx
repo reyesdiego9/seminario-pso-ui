@@ -17,7 +17,7 @@ const SelectInventory = (props: any) => {
 
   const fetchData = async () => {
     const res = axios
-      .get(`http://localhost:8080/${api}`)
+      .get(`http://192.168.194.95:8080/${api}`)
       .then((response) => {
         const dataSelect = response.data.body;
         dataSelect.forEach((data) => {

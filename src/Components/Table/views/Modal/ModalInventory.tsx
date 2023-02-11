@@ -39,7 +39,7 @@ const ModalInventory = (props: any) => {
     switch (configModal.name) {
       case 'ADD_INVENTORY_DATA':
         axios
-          .post('http://localhost:8080/suministros/save', addInventory, {
+          .post('http://192.168.194.95:8080/suministros/save', addInventory, {
             headers: {
               // Overwrite Axios's automatically set Content-Type
               'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const ModalInventory = (props: any) => {
         console.log(addInventory);
         await axios
           .post(
-            `http://localhost:8080/inventario/add/${idsuministro}/${addInventory.cantidad}/1`,
+            `http://192.168.194.95:8080/inventario/add/${idsuministro}/${addInventory.cantidad}/1`,
             {
               headers: {
                 'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ const ModalInventory = (props: any) => {
         const { idCategorias } = addInventory;
         console.log(addInventory);
         await axios.post(
-          `http://localhost:8080/inventario/add/${idCategorias}/${addInventory.cantidad}/1`,
+          `http://192.168.194.95:8080/inventario/add/${idCategorias}/${addInventory.cantidad}/1`,
           {
             headers: {
               'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ const ModalInventory = (props: any) => {
       case 'MANTENIMIENTO':
         console.log(addInventory);
         await axios.post(
-          `http://localhost:8080/inventario/update/${addInventory.id_inventario}/${addInventory.cantidad}/${addInventory.idCategorias}`
+          `http://192.168.194.95:8080/inventario/update/${addInventory.id_inventario}/${addInventory.cantidad}/${addInventory.idCategorias}`
         );
 
         break;

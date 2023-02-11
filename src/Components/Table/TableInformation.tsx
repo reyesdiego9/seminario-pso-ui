@@ -97,7 +97,7 @@ const TableInformation = () => {
 
   const handelPdf = async () => {
     return await axios
-      .get('http://localhost:8080/generate/pdf', {
+      .get('http://192.168.194.95:8080/generate/pdf', {
         responseType: 'blob',
       })
       .then((response) => fileDownload(response.data, 'filename.pdf'));
